@@ -4,6 +4,8 @@ import { Caso } from 'src/app/model/caso';
 import { UserService } from 'src/app/services/user.service';
 import { CasoService } from 'src/app/services/caso.service';
 import {AuthenticationService} from '../../services/auth.service';
+import {CorreoService} from '../../services/correo.service';
+import {error} from 'protractor';
 
 @Component({
   selector: 'app-add-book',
@@ -19,7 +21,10 @@ export class AddCasoComponent implements OnInit {
   msgError = '';
   Email = this.authenticationService.getLoggedInUserName();
 
-  constructor(private casoService: CasoService, private userService: UserService, private authenticationService: AuthenticationService) {
+  constructor(private casoService: CasoService,
+              private userService: UserService,
+              private authenticationService: AuthenticationService,
+              private correoService: CorreoService) {
     // this.getAuthors();
   }
 
@@ -62,6 +67,22 @@ export class AddCasoComponent implements OnInit {
         data => {
           this.submitted = true;
           console.log(data);
+          const correo = {
+            correoPara: this.Email,
+            correoSubject: 'Su caso se ha creado satisfactoriamente',
+            correoContenido: 'Estimado\nSe confirma la creacion de su caso.\n'
+          };
+          console.log(correo);
+          this.correoService.get(correo).subscribe(
+            correo =>{
+              this.submitted = true;
+            },
+            error => {
+              //this.msgError  = error.message + ' \n ' + error.error.message;
+              this.submitted = true;
+              console.log(error);
+            }
+          );
         },
         error => {
           this.msgError  = error.message + ' \n ' + error.error.message;
