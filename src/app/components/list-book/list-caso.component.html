@@ -1,0 +1,86 @@
+<form #myForm="ngForm">
+
+<div class="container">
+    <div class="card">
+      <h3 class="text-center">Caso List</h3>
+      <div class="card-body">
+      <div class="form-group form-inline">
+        Search book by name:
+        <input class="form-control ml-2" type="text" name="searchTerm" [(ngModel)]="searchTerm"
+          (input)="search($event.target.value)" />
+      </div>
+        <table class="table table-striped">
+          <thead>
+            <th>No. Referencia</th>
+            <th>Nombre del Caso</th>
+            <th>Descripción</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of casosSet | listFilter: searchTerm ; let i = index " >
+              <td>{{item.idCaso}}</td>
+              <td>{{item.nombreCaso}}</td>
+              <td>{{item.caso}}</td>
+
+              <td>
+                <button class="btn btn-info btn-sm"
+                (click)="triggerModal(modalData, item)">
+                  Edit </button>
+                  &nbsp;
+                <button class='btn btn-danger btn-sm' (click)="deleteBook(item.idCaso)" >
+                  Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+
+  <ng-template #modalData let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Edit Caso</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div style="width: 400px; margin: auto;">
+        <div class="submit-form">
+            <div class="form-group">
+              <label for="NombreCaso">Nombre del Caso</label>
+              <input
+                type="text"
+                class="form-control"
+                id="NombreCaso"
+                required
+                [(ngModel)]="currentCaso.nombreCaso"
+                name="NombreCaso"
+              />
+            </div>
+            <div class="form-group">
+              <label for="Descripcion">Descripción</label>
+              <textarea
+                type="text"
+                class="form-control"
+                id="Descripcion"
+                required
+                [(ngModel)]="currentCaso.caso"
+                name="Descripcion"
+              ></textarea>
+            </div>
+          </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-success"
+      (click)="updateBook()"
+      (click)="modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>
+
+</form>
