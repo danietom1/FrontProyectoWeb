@@ -74,11 +74,10 @@ export class AddCasoComponent implements OnInit {
           };
           console.log(correo);
           this.correoService.get(correo).subscribe(
-            correo =>{
+            correo => {
               this.submitted = true;
             },
             error => {
-              //this.msgError  = error.message + ' \n ' + error.error.message;
               this.submitted = true;
               console.log(error);
             }
